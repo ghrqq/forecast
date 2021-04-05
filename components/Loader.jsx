@@ -16,8 +16,6 @@ export default function Loader() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const ApiKey = "75f972b80e26f14fe6c920aa6a85ad57&cnt=40"; // TODO: This should go to process.env
-    const geolocKey = "09ba3820-0f88-11eb-9ba6-e1dd7dece2b8"; // TODO: This should go to process.env
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -28,9 +26,9 @@ export default function Loader() {
 
       axios({
         method: "get",
-        url: `http://api.openweathermap.org/geo/1.0/reverse?lat=${
+        url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${
           pos.coords.latitude
-        }&lon=${pos.coords.longitude}&limit=${1}&appid=${ApiKey}`,
+        }&lon=${pos.coords.longitude}&limit=${1}&appid=${process.env.ApiKey}`,
       }).then((res) => {
         dispatch(
           update({
@@ -48,7 +46,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${ApiKey}&units=imperial`,
+          url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.ApiKey}&units=imperial`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(
@@ -79,7 +77,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=${ApiKey}&units=imperial`,
+          url: `https://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=${process.env.ApiKey}&units=imperial`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(dataSetter({ data: dateGroupper(res.data.list) }));
@@ -106,7 +104,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://geolocation-db.com/json/${geolocKey}`,
+          url: `https://geolocation-db.com/json/${process.env.geolocKey}`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(
@@ -118,9 +116,11 @@ export default function Loader() {
             );
             axios({
               method: "get",
-              url: `http://api.openweathermap.org/geo/1.0/reverse?lat=${
+              url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${
                 res.data.latitude
-              }&lon=${res.data.longitude}&limit=${5}&appid=${ApiKey}`,
+              }&lon=${res.data.longitude}&limit=${5}&appid=${
+                process.env.ApiKey
+              }`,
             }).then((res) => {
               dispatch(
                 update({
@@ -138,7 +138,7 @@ export default function Loader() {
               );
               axios({
                 method: "get",
-                url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${ApiKey}&units=imperial`,
+                url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.ApiKey}&units=imperial`,
               }).then((res) => {
                 if (res.status === 200) {
                   dispatch(

@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const ApiKey = "75f972b80e26f14fe6c920aa6a85ad57&cnt=40"; // TODO: This should go to process.env
-
 const locFinder = () => {
   // Options for navigator geolocation
   const options = {
@@ -24,11 +22,11 @@ const locFinder = () => {
       method: "get",
       url: `http://api.openweathermap.org/geo/1.0/reverse?lat=${
         pos.coords.latitude
-      }&lon=${pos.coords.longitude}&limit=${1}&appid=${ApiKey}`,
+      }&lon=${pos.coords.longitude}&limit=${1}&appid=${process.env.ApiKey}`,
     }).then((res) => {
       axios({
         method: "get",
-        url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${ApiKey}`,
+        url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.ApiKey}`,
       }).then((res) => (info = res));
     });
 
