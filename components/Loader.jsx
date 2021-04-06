@@ -104,7 +104,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://geolocation-db.com/json/${process.env.geolocKey}`,
+          url: `https://geolocation-db.com/json/${process.env.geoLocKey}`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(
