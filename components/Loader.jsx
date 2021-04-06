@@ -179,7 +179,9 @@ export default function Loader() {
   return (
     <Container maxWidth="sm">
       <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item>{/* <Header /> */}</Grid>
+        <Grid item>
+          <Header />
+        </Grid>
 
         <Grid item>
           <h5>{msg} </h5>
