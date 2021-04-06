@@ -8,10 +8,11 @@ import { finish, update } from "../redux/features/loaderSlice";
 import { dataSetter, locSetter } from "../redux/features/dataSlice";
 import { dateGroupper } from "../tools/dataProcess";
 import axios from "axios";
+
 // import { locFinder } from "../tools/locFinder";
 
 export default function Loader() {
-  const { msg, process } = useSelector((state) => state.loader);
+  const { msg, progress } = useSelector((state) => state.loader);
 
   const dispatch = useDispatch();
 
@@ -28,7 +29,9 @@ export default function Loader() {
         method: "get",
         url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${
           pos.coords.latitude
-        }&lon=${pos.coords.longitude}&limit=${1}&appid=${process.env.ApiKey}`,
+        }&lon=${pos.coords.longitude}&limit=${1}&appid=${
+          process.env.NEXT_PUBLIC_ApiKey
+        }`,
       }).then((res) => {
         dispatch(
           update({
@@ -46,7 +49,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.ApiKey}&units=imperial`,
+          url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.NEXT_PUBLIC_ApiKey}&units=imperial`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(
@@ -77,7 +80,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=${process.env.ApiKey}&units=imperial`,
+          url: `https://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=${process.env.NEXT_PUBLIC_ApiKey}&units=imperial`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(dataSetter({ data: dateGroupper(res.data.list) }));
@@ -104,7 +107,7 @@ export default function Loader() {
         );
         axios({
           method: "get",
-          url: `https://geolocation-db.com/json/${process.env.geoLocKey}`,
+          url: `https://geolocation-db.com/json/${process.env.NEXT_PUBLIC_geoLocKey}`,
         }).then((res) => {
           if (res.status === 200) {
             dispatch(
@@ -119,7 +122,7 @@ export default function Loader() {
               url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${
                 res.data.latitude
               }&lon=${res.data.longitude}&limit=${5}&appid=${
-                process.env.ApiKey
+                process.env.NEXT_PUBLIC_ApiKey
               }`,
             }).then((res) => {
               dispatch(
@@ -138,7 +141,7 @@ export default function Loader() {
               );
               axios({
                 method: "get",
-                url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.ApiKey}&units=imperial`,
+                url: `https://api.openweathermap.org/data/2.5/forecast?q=${res.data[0].name},${res.data[0].country}&APPID=${process.env.NEXT_PUBLIC_ApiKey}&units=imperial`,
               }).then((res) => {
                 if (res.status === 200) {
                   dispatch(
@@ -186,7 +189,7 @@ export default function Loader() {
       <LinearProgress
         style={{ marginTop: "20px" }}
         variant="determinate"
-        value={process}
+        value={progress}
       />
     </Container>
   );

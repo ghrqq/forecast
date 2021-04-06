@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const loaderSlice = createSlice({
   name: "loader",
   initialState: {
-    process: 0,
+    progress: 0,
     msg: "Trying to get your approximate location.",
     isLoading: true,
   },
