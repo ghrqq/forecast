@@ -9,7 +9,7 @@ export const loaderSlice = createSlice({
   },
   reducers: {
     update: (state, action) => {
-      state.process = state.process + action.payload.val;
+      state.progress = state.progress + action.payload.val;
       state.msg = action.payload.msg;
     },
     finish: (state) => {

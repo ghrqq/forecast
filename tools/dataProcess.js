@@ -31,6 +31,14 @@ const cardCalculator = (arr) => {
   temp.min = mains.map((j) => j.temp_min).sort((a, b) => a - b)[0];
   temp.max = mains.map((j) => j.temp_max).sort((a, b) => b - a)[0];
   temp.date = arr[0].dt_txt.split(" ")[0];
+  temp.feels =
+    mains.map((j) => j.feels_like).reduce((a, b) => a + b, 0) / arr.length;
+  temp.humidity =
+    mains.map((j) => j.humidity).reduce((a, b) => a + b, 0) / arr.length;
+  temp.pressure =
+    mains.map((j) => j.pressure).reduce((a, b) => a + b, 0) / arr.length;
+  temp.visibility =
+    arr.map((i) => i.visibility).reduce((a, b) => a + b, 0) / arr.length;
 
   return temp;
 };

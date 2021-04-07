@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -18,6 +19,9 @@ import {
   locSetter,
 } from "../redux/features/dataSlice";
 import Header from "./Header";
+import IconSelector from "./IconSelector";
+import WindDisplayer from "./WindDisplayer";
+import WCardDetail from "./WCardDetail";
 
 const useStyles = makeStyles({
   root: {
@@ -90,22 +94,20 @@ export default function WCard({ isFocus, index, data }) {
       variant={isFocus ? null : "outlined"}
       style={{ minWidth: matches ? "150px" : null }}
     >
+      <IconSelector
+        code={data[0].weather[0].icon}
+        title={data[0].weather[0].description}
+      />
       {isDetail ? (
         <CardContent onClick={() => dispatch(focusSetter({ focus: index }))}>
-          <Typography
-            className={classes.secondary}
-            color="textSecondary"
-            gutterBottom
-          >
-            Second Page
-          </Typography>
-          <Typography variant="h5" component="h2">
-            Something
-          </Typography>
-          <Typography className={classes.secondary} color="textSecondary">
-            MIN: <br />
-          </Typography>
-          <Typography variant="body2" component="p"></Typography>
+          <WCardDetail
+            humidity={state.humidity}
+            pressure={state.pressure}
+            feels={state.feels}
+            visibility={state.visibility}
+            isFocus={isFocus}
+            short={short}
+          />
         </CardContent>
       ) : (
         <CardContent onClick={() => dispatch(focusSetter({ focus: index }))}>
@@ -124,7 +126,12 @@ export default function WCard({ isFocus, index, data }) {
           <Typography
             variant="h5"
             component="h2"
-            style={{ color: colorProvider(state.avg, short) }}
+            style={{
+              backgroundColor: colorProvider(state.avg, short),
+              color: "#fff",
+              padding: "5px",
+              borderRadius: "5px",
+            }}
           >
             {short === "F"
               ? Math.round(state.avg)
@@ -147,10 +154,11 @@ export default function WCard({ isFocus, index, data }) {
       )}
       <CardActions onClick={() => setIsDetail(!isDetail)}>
         {isDetail ? (
-          <Button size="small">Hide Details</Button>
+          <Button size="small">General</Button>
         ) : (
           <Button size="small">Details</Button>
         )}
+        <WindDisplayer angle={data[0].wind.deg} speed={data[0].wind.speed} />
       </CardActions>
     </Card>
   );

@@ -6,10 +6,12 @@ import CloudIcon from "@material-ui/icons/Cloud";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import LooksIcon from "@material-ui/icons/Looks";
 import AcUnitIcon from "@material-ui/icons/AcUnit";
+import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 
 export default function Header() {
   const [state, setState] = useState(0);
   const iconArr = [
+    <BeachAccessIcon style={{ fontSize: 80 }} color="primary" />,
     <CloudIcon style={{ fontSize: 80 }} color="primary" />,
     <WbSunnyIcon style={{ fontSize: 80 }} color="primary" />,
     <LooksIcon style={{ fontSize: 80 }} color="primary" />,
@@ -18,7 +20,7 @@ export default function Header() {
 
   useEffect(() => {
     const headerSwitch = setInterval(() => {
-      if (state + 1 < iconArr.length - 1) {
+      if (state + 1 < iconArr.length) {
         setState(state + 1);
       } else {
         setState(0);

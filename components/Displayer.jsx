@@ -70,7 +70,11 @@ export default function Displayer() {
       >
         {data[focus].map((i) => (
           <Grid item key={i.dt}>
-            <Bar val={i.main.temp} time={i.dt_txt.split(" ")[1]} />
+            <Bar
+              code={i.weather[0].icon}
+              val={i.main.temp}
+              time={i.dt_txt.split(" ")[1]}
+            />
           </Grid>
         ))}
       </Grid>
