@@ -15,7 +15,10 @@ export default function Location({ city, country }) {
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>
-      <Container maxWidth="sm">
+      <Container
+        maxWidth="sm"
+        style={{ textAlign: "center", marginTop: "20px" }}
+      >
         <Tooltip
           PopperProps={{
             disablePortal: true,

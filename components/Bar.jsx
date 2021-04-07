@@ -1,0 +1,39 @@
+import React from "react";
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+
+import { useSelector } from "react-redux";
+import { converter } from "../tools/fahrenheitToCelsius";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  root: {
+    color: "#fff",
+    textAlign: "center",
+    marginTop: "30px",
+    padding: "2px",
+    minWidth: "20px",
+    backgroundColor: "#3f50b5",
+  },
+  time: {
+    fontSize: "14px",
+  },
+});
+
+export default function Bar({ val, time }) {
+  const { short } = useSelector((state) => state.config);
+  const classes = useStyles();
+  return (
+    <>
+      <Card
+        style={{ height: val * 2 }}
+        variant="outlined"
+        className={classes.root}
+      >
+        {short === "F" ? Math.round(val) : Math.round(converter(val))}&deg;
+        {short}
+      </Card>
+      <Typography className={classes.time}>{time.slice(0, 5)}</Typography>
+    </>
+  );
+}

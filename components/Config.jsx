@@ -16,7 +16,7 @@ export default function Config() {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" style={{ textAlign: "center", padding: "20px" }}>
       <FormControlLabel
         value="Fahrenheit"
         control={
