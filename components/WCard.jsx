@@ -95,13 +95,8 @@ export default function WCard({ isFocus, index, data }) {
         minWidth: matches ? "150px" : null,
       }}
     >
-      <Tooltip title={state.date}>
-        <Typography
-          className={classes.date}
-          color="textSecondary"
-          gutterBottom
-          alignCenter
-        >
+      <Tooltip title={state.date ? state.date : "date"}>
+        <Typography className={classes.date} color="textSecondary" gutterBottom>
           {index === 0
             ? "Today"
             : index === 1
@@ -116,6 +111,7 @@ export default function WCard({ isFocus, index, data }) {
         title={data[0].weather[0].description}
         matches={matches}
       />
+
       {isDetail ? (
         // Back of the Weather card
         <CardContent onClick={() => dispatch(focusSetter({ focus: index }))}>
@@ -188,7 +184,7 @@ export default function WCard({ isFocus, index, data }) {
         onClick={() => setIsDetail(!isDetail)}
         style={{ margin: "0 auto", backgroundColor: "#f5f5f5" }}
       >
-        <Tooltip title={`Details`}>
+        <Tooltip title="Details">
           <DetailsIcon />
         </Tooltip>
         {/* In order to preserve the same look for a wide variety of screen sizes (>359px) button description is removed when the screen is smaller than 600px */}
