@@ -8,17 +8,19 @@ export const loaderSlice = createSlice({
     isLoading: true,
   },
   reducers: {
+    // Updating the message and progressbar between different API calls.
     update: (state, action) => {
       state.progress = state.progress + action.payload.val;
       state.msg = action.payload.msg;
     },
+
+    // Finishing the loading and data preperation process.
     finish: (state) => {
       state.isLoading = false;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { update, finish } = loaderSlice.actions;
 
 export default loaderSlice.reducer;

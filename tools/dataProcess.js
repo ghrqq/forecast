@@ -24,23 +24,43 @@ const dateGroupper = (arr) => {
 
 const cardCalculator = (arr) => {
   const temp = {};
+
+  // The response of the API is an array of 40 entries.
+  // Relevant data is within the "main" key in every entry.
+
   const mains = arr.map((i) => i.main);
 
-  temp.avg = mains.map((j) => j.temp).reduce((a, b) => a + b, 0) / arr.length;
+  temp.avg = Math.round(
+    mains.map((j) => j.temp).reduce((a, b) => a + b, 0) / arr.length
+  ); // Average temprature of day
 
-  temp.min = mains.map((j) => j.temp_min).sort((a, b) => a - b)[0];
-  temp.max = mains.map((j) => j.temp_max).sort((a, b) => b - a)[0];
-  temp.date = arr[0].dt_txt.split(" ")[0];
-  temp.feels =
-    mains.map((j) => j.feels_like).reduce((a, b) => a + b, 0) / arr.length;
-  temp.humidity =
-    mains.map((j) => j.humidity).reduce((a, b) => a + b, 0) / arr.length;
-  temp.pressure =
-    mains.map((j) => j.pressure).reduce((a, b) => a + b, 0) / arr.length;
-  temp.visibility =
-    arr.map((i) => i.visibility).reduce((a, b) => a + b, 0) / arr.length;
+  temp.min = Math.round(mains.map((j) => j.temp_min).sort((a, b) => a - b)[0]); // Minimum temprature of day
+  temp.max = Math.round(mains.map((j) => j.temp_max).sort((a, b) => b - a)[0]); // Maximum temprature of day
+  temp.date = arr[0].dt_txt.split(" ")[0]; // Date without time
+  temp.feels = Math.round(
+    mains.map((j) => j.feels_like).reduce((a, b) => a + b, 0) / arr.length
+  ); // Average feels_like value of day
+  temp.humidity = Math.round(
+    mains.map((j) => j.humidity).reduce((a, b) => a + b, 0) / arr.length
+  ); // Average humidity of day
+  temp.pressure = Math.round(
+    mains.map((j) => j.pressure).reduce((a, b) => a + b, 0) / arr.length
+  ); // Average pressure of day
+  temp.visibility = Math.round(
+    arr.map((i) => i.visibility).reduce((a, b) => a + b, 0) / arr.length
+  ); // Average visibility of day
 
   return temp;
+
+  // Returns
+  //  { avg: num
+  // date: str
+  // feels: num
+  // humidity: num
+  // max: num
+  // min: num
+  // pressure: num
+  // visibility: num}
 };
 
 module.exports = {

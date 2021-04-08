@@ -3,36 +3,35 @@ import { createSlice } from "@reduxjs/toolkit";
 export const dataSlice = createSlice({
   name: "data",
   initialState: {
-    focus: 0,
-    length: 0,
-    data: {},
-    loc: {},
+    focus: 0, // Index of the selected day
+    length: 0, // Length of days - API returns 5-6 days according to the request time. Useful for iteration and arrow notation.
+    data: {}, // Main data.
+    loc: {}, // Location where the data belongs.
   },
   reducers: {
+    // Setting the data.
     dataSetter: (state, action) => {
       state.data = action.payload.data;
-      state.length = action.payload.data.length; //TODO: This may be changed according to the data type.
+      state.length = action.payload.data.length;
     },
+    // To change the focus when another card is clicked.
     focusSetter: (state, action) => {
       state.focus = action.payload.focus;
     },
+    // To change the focus by clicks on arrows.
     focusMover: (state, action) => {
       state.focus += action.payload.direction;
     },
-    focusGetter: (state) => {
-      return state.data[state.focus];
-    },
+    // To store the location data.
     locSetter: (state, action) => {
       state.loc = action.payload.loc;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
   dataSetter,
   focusSetter,
-  focusGetter,
   locSetter,
   focusMover,
 } = dataSlice.actions;

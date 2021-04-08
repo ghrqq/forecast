@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Radio from "@material-ui/core/Radio";
 import Container from "@material-ui/core/Container";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -6,12 +6,10 @@ import { typeSetter } from "../redux/features/configSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Config() {
-  //   const [selected, setSelected] = useState("F");
   const { short } = useSelector((state) => state.config);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    // setSelected(e.target.value);
+  const handleChange = () => {
     dispatch(typeSetter());
   };
 

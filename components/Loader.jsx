@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+
+// Material
 import Container from "@material-ui/core/Container";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import Header from "./Header";
 import Grid from "@material-ui/core/Grid";
+// Redux
 import { useSelector, useDispatch } from "react-redux";
 import { finish, update } from "../redux/features/loaderSlice";
 import { dataSetter, locSetter } from "../redux/features/dataSlice";
+// Components
+import Header from "./Header";
+// Tols
 import { dateGroupper } from "../tools/dataProcess";
-import axios from "axios";
-
-// import { locFinder } from "../tools/locFinder";
 
 export default function Loader() {
   const { msg, progress } = useSelector((state) => state.loader);
@@ -17,14 +20,25 @@ export default function Loader() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // This function will try to get user's location from browser.
+    // If user does not allow us to get location, it will show Munich's forecast by default.
+    // If user allows, but an error occurs, it will make an API Call to a Geoloc DB
+    // Once we have the coordinates an API call will be made to OpenWeather API to get the closest city's name and country code.
+    //
+
     const options = {
+      // Options for navigator geolocation
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
     };
     const success = (pos) => {
+      // This function will run in case of a successfull attempt to get coordinates.
       dispatch(update({ val: 25, msg: "Location founded." }));
-
+      // Free version of the API allows us to make a querry only with a proper city name and country code but the outcome of geoloc, is latitude and longitude.
+      // Luckily we can use the same API to find closest city to given coordinates.
+      // First request will GET the closest city and its country to given coordinates.
+      // Second request will GET the actual data with the returned city name and country code.
       axios({
         method: "get",
         url: `https://api.openweathermap.org/geo/1.0/reverse?lat=${
@@ -60,7 +74,9 @@ export default function Loader() {
               })
             );
             dispatch(dataSetter({ data: dateGroupper(res.data.list) }));
+            // Sets the data
             setTimeout(() => {
+              // Message display duration. Then changes load state
               dispatch(finish());
             }, 1000);
           }
@@ -70,6 +86,8 @@ export default function Loader() {
       return;
     };
     const error = (err) => {
+      // This will be fired in case of error.
+      // If user does not allow us to get the location, a custom forecast will be fetched.
       if (err.code === 1) {
         dispatch(
           update({
@@ -83,9 +101,9 @@ export default function Loader() {
           url: `https://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=${process.env.NEXT_PUBLIC_ApiKey}&units=imperial`,
         }).then((res) => {
           if (res.status === 200) {
-            dispatch(dataSetter({ data: dateGroupper(res.data.list) }));
+            dispatch(dataSetter({ data: dateGroupper(res.data.list) })); // Sets the data
             setTimeout(() => {
-              dispatch(finish());
+              dispatch(finish()); // Message display duration. Then changes load state
             }, 1000);
             dispatch(
               locSetter({
@@ -98,6 +116,7 @@ export default function Loader() {
           }
         });
       } else {
+        // If user consents but an error occurs, will try GeoLoc DB
         dispatch(
           update({
             val: 10,
@@ -151,8 +170,9 @@ export default function Loader() {
                         "We got all the data we need. Just preparing it for your pleasure.",
                     })
                   );
-                  dispatch(dataSetter({ data: dateGroupper(res.data.list) }));
+                  dispatch(dataSetter({ data: dateGroupper(res.data.list) })); // Sets the data
                   setTimeout(() => {
+                    // Message display duration. Then changes load state
                     dispatch(finish());
                   }, 1000);
                 }

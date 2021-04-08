@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// Material
 import Chip from "@material-ui/core/Chip";
 import PublicIcon from "@material-ui/icons/Public";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -7,9 +8,10 @@ import NotListedLocationIcon from "@material-ui/icons/NotListedLocation";
 import Container from "@material-ui/core/Container";
 
 export default function Location({ city, country }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Tooltip management state.
 
   const handleToolTip = () => {
+    // Tooltip handler
     setIsOpen(!isOpen);
   };
 
@@ -26,7 +28,7 @@ export default function Location({ city, country }) {
           disableHoverListener
           onClose={handleToolTip}
           open={isOpen}
-          title="It may not be the 'closest' city to your real position. Geolocation data may vary due to ISP's IP Server locations."
+          title="It may not be the 'closest' city to your real position. Geolocation data may vary due to your ISP's IP Server locations."
         >
           <Chip
             icon={<PublicIcon />}

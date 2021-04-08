@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from "react";
 
+// Material
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
+import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { converter } from "../tools/fahrenheitToCelsius";
+import DetailsIcon from "@material-ui/icons/Details";
+import Tooltip from "@material-ui/core/Tooltip";
+
+// Redux
 import { useSelector, useDispatch } from "react-redux";
+import { focusSetter } from "../redux/features/dataSlice";
+// Tools
+import { converter } from "../tools/fahrenheitToCelsius";
 import { cardCalculator } from "../tools/dataProcess";
 import { colorProvider } from "../tools/painter";
-import {
-  dataSetter,
-  focusSetter,
-  focusGetter,
-  locSetter,
-} from "../redux/features/dataSlice";
-import Header from "./Header";
+import { dateConverter } from "../tools/dateConverter";
+
+// Components
 import IconSelector from "./IconSelector";
 import WindDisplayer from "./WindDisplayer";
 import WCardDetail from "./WCardDetail";
+import PlaceHolder from "./PlaceHolder";
 
 const useStyles = makeStyles({
   root: {
@@ -37,7 +39,7 @@ const useStyles = makeStyles({
     minWidth: 120,
     maxWidth: 400,
     minHeight: 170,
-    border: "5px solid black",
+    border: "2px solid black",
 
     cursor: "pointer",
     textAlign: "center",
@@ -46,10 +48,17 @@ const useStyles = makeStyles({
     marginTop: "20px",
     minWidth: 100,
     minHeight: 150,
+    outline: "none",
+    verticalAlign: "center",
   },
 
   secondary: {
     fontSize: 12,
+  },
+  date: {
+    fontSize: 16,
+    fontWeight: 600,
+    backgroundColor: "#f5f5f5",
   },
   pos: {
     marginBottom: 12,
@@ -57,20 +66,15 @@ const useStyles = makeStyles({
 });
 
 export default function WCard({ isFocus, index, data }) {
-  const [state, setState] = useState({});
-  const [isDetail, setIsDetail] = useState(false);
-  const { short } = useSelector((state) => state.config);
+  const [state, setState] = useState({}); // Store the processed data locally.
+  const [isDetail, setIsDetail] = useState(false); // Display back side of card.
+  const { short } = useSelector((state) => state.config); // Unit type
+  const matches = useMediaQuery("(min-width:600px)"); // Card size and spacing in smaller screens.
   const classes = useStyles();
   const dispatch = useDispatch();
-  const matches = useMediaQuery("(min-width:600px)");
-
-  //   const colorProvider = (val, type) => {
-  //       const palette = ["#e66735", "#c6845b" , "#a5a181", "#74ccb9" , "#54e9df"]
-  //       const range ={C: [30, 15, 0, -15, -30], F: [86, 59, 32, 5, -22] };
-
-  //   }
 
   useEffect(() => {
+    // Process the data for the card and return displayable values when component loads or data changes.
     if (data) {
       setState(cardCalculator(data));
     } else {
@@ -79,26 +83,41 @@ export default function WCard({ isFocus, index, data }) {
   }, [data]);
 
   if (!data) {
-    return (
-      <Card className={classes.placeHolder}>
-        <Header />
-
-        {/* TODO: a nice placeholder will come here */}
-      </Card>
-    );
+    // In case of missing data or a date range is out of the current data display a placeholder.
+    return <PlaceHolder />;
   }
 
   return (
     <Card
       className={isFocus ? classes.focus : classes.root}
       variant={isFocus ? null : "outlined"}
-      style={{ minWidth: matches ? "150px" : null }}
+      style={{
+        minWidth: matches ? "150px" : null,
+      }}
     >
+      <Tooltip title={state.date}>
+        <Typography
+          className={classes.date}
+          color="textSecondary"
+          gutterBottom
+          alignCenter
+        >
+          {index === 0
+            ? "Today"
+            : index === 1
+            ? "Tomorrow"
+            : dateConverter(data[0].dt)}
+        </Typography>
+      </Tooltip>
+
+      {/* Icon Selector uses index "0" as it is the most recent data or the first data of the day. */}
       <IconSelector
         code={data[0].weather[0].icon}
         title={data[0].weather[0].description}
+        matches={matches}
       />
       {isDetail ? (
+        // Back of the Weather card
         <CardContent onClick={() => dispatch(focusSetter({ focus: index }))}>
           <WCardDetail
             humidity={state.humidity}
@@ -110,7 +129,10 @@ export default function WCard({ isFocus, index, data }) {
           />
         </CardContent>
       ) : (
-        <CardContent onClick={() => dispatch(focusSetter({ focus: index }))}>
+        <CardContent
+          style={{ padding: matches ? null : "1px" }}
+          onClick={() => dispatch(focusSetter({ focus: index }))}
+        >
           <Typography
             className={classes.secondary}
             color="textSecondary"
@@ -129,7 +151,7 @@ export default function WCard({ isFocus, index, data }) {
             style={{
               backgroundColor: colorProvider(state.avg, short),
               color: "#fff",
-              padding: "5px",
+              padding: matches ? "10px" : "2px",
               borderRadius: "5px",
             }}
           >
@@ -147,18 +169,30 @@ export default function WCard({ isFocus, index, data }) {
             &deg;
             {short}
           </Typography>
-          <Typography variant="body2" component="p">
+          {/* <Typography
+            variant="body2"
+            component="p"
+            style={{ fontSize: "10px" }}
+          >
             {state.date}
-          </Typography>
+          </Typography> */}
+          {/* Wind Displayer */}
+          <WindDisplayer
+            matches={matches}
+            angle={data[0].wind.deg}
+            speed={data[0].wind.speed}
+          />
         </CardContent>
       )}
-      <CardActions onClick={() => setIsDetail(!isDetail)}>
-        {isDetail ? (
-          <Button size="small">General</Button>
-        ) : (
-          <Button size="small">Details</Button>
-        )}
-        <WindDisplayer angle={data[0].wind.deg} speed={data[0].wind.speed} />
+      <CardActions
+        onClick={() => setIsDetail(!isDetail)}
+        style={{ margin: "0 auto", backgroundColor: "#f5f5f5" }}
+      >
+        <Tooltip title={`Details`}>
+          <DetailsIcon />
+        </Tooltip>
+        {/* In order to preserve the same look for a wide variety of screen sizes (>359px) button description is removed when the screen is smaller than 600px */}
+        {matches ? "Details" : null}
       </CardActions>
     </Card>
   );

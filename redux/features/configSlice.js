@@ -8,6 +8,7 @@ export const configSlice = createSlice({
   },
   reducers: {
     typeSetter: (state) => {
+      // Setting the state either F or C
       if (state.unit === "Fahrenheit") {
         state.unit = "Celsius";
         state.short = "C";
@@ -19,7 +20,6 @@ export const configSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { typeSetter } = configSlice.actions;
 
 export default configSlice.reducer;

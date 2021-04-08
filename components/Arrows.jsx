@@ -1,11 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { focusMover } from "../redux/features/dataSlice";
+// Material
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { focusMover } from "../redux/features/dataSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -31,7 +34,7 @@ export default function Arrows() {
         alignItems="center"
       >
         <Grid item>
-          {focus - 1 < 0 ? null : (
+          {focus - 1 < 0 ? null : ( // To hide the arrow when there is no focusable value
             <ArrowBackIcon
               className={classes.root}
               onClick={() => dispatch(focusMover({ direction: -1 }))}
@@ -39,7 +42,7 @@ export default function Arrows() {
           )}
         </Grid>
         <Grid item>
-          {focus + 1 == length ? null : (
+          {focus + 1 == length ? null : ( // To hide the arrow when there is no focusable value
             <ArrowForwardIcon
               className={classes.root}
               onClick={() => dispatch(focusMover({ direction: +1 }))}

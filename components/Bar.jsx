@@ -1,11 +1,18 @@
 import React from "react";
+
+// Material
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-
-import { useSelector } from "react-redux";
-import { converter } from "../tools/fahrenheitToCelsius";
 import { makeStyles } from "@material-ui/core/styles";
+
+// Redux
+import { useSelector } from "react-redux";
+
+// Tools
+import { converter } from "../tools/fahrenheitToCelsius";
+
+// Components
 import IconSelector from "./IconSelector";
 
 const useStyles = makeStyles({
