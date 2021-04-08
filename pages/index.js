@@ -22,7 +22,7 @@ export default function Home() {
         />
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_VERCEL_URL} />
+        <meta property="og:url" content="https://theoforecast.vercel.app/" />
         <meta property="og:title" content="Theo's Forecast" />
         <meta
           property="og:description"
@@ -30,13 +30,13 @@ export default function Home() {
         />
         <meta
           property="og:image"
-          content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/meta.png`}
+          content="https://theoforecast.vercel.app/meta.png"
         />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:url"
-          content={process.env.NEXT_PUBLIC_VERCEL_URL}
+          content="https://theoforecast.vercel.app/"
         />
         <meta property="twitter:title" content="Theo's Forecast" />
         <meta
@@ -45,7 +45,7 @@ export default function Home() {
         />
         <meta
           property="twitter:image"
-          content={`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/meta.png`}
+          content="https://theoforecast.vercel.app/meta.png"
         />
       </Head>
       {isLoading ? <Loader /> : <Displayer />}
