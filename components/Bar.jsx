@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 
 // Tools
 import { converter } from "../tools/fahrenheitToCelsius";
+import { colorProvider } from "../tools/painter";
 
 // Components
 import IconSelector from "./IconSelector";
@@ -22,7 +23,6 @@ const useStyles = makeStyles({
     marginTop: "30px",
     padding: "2px",
     minWidth: "20px",
-    backgroundColor: "#3f50b5",
   },
   time: {
     fontSize: "14px",
@@ -35,7 +35,7 @@ export default function Bar({ code, val, time }) {
   return (
     <>
       <Card
-        style={{ height: val * 2 }}
+        style={{ height: val * 2, backgroundColor: colorProvider(val) }}
         variant="outlined"
         className={classes.root}
       >
